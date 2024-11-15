@@ -9,12 +9,13 @@ let playerRoles = [];
 let currentPlayer = 0;
 let timer;
 let timerSeconds = 0;
+let isGameStarted = false;
 
 document.getElementById("startGameButton").addEventListener("click", startGame);
-document.getElementById("nextPlayerButton").addEventListener("click", showPlayerRole);
-document.getElementById("nextRoleButton").addEventListener("click", handleNextPlayer);
+document.getElementById("revealRoleButton").addEventListener("click", showPlayerRole);
+document.getElementById("nextPlayerButton").addEventListener("click", nextPlayerTransition);
 
-// Funktion zum Starten des Spiels
+// Spiel starten und Rollen verteilen
 function startGame() {
   const playerCount = parseInt(document.getElementById("playerCount").value);
   const spyCount = parseInt(document.getElementById("spyCount").value);
@@ -33,61 +34,64 @@ function startGame() {
     return;
   }
 
+  // Wörter aus den ausgewählten Kategorien sammeln
   let allWords = [];
   selectedCategories.forEach(category => {
     allWords = allWords.concat(categoryMap[category]);
   });
 
+  // Geheimes Wort wählen
   const secretWord = allWords[Math.floor(Math.random() * allWords.length)];
   playerRoles = [];
 
+  // Rollen für die Spieler erstellen
   for (let i = 0; i < playerCount - spyCount; i++) {
     playerRoles.push(`Geheimes Wort: ${secretWord}`);
   }
-
   for (let i = 0; i < spyCount; i++) {
     playerRoles.push("Du bist der Spion!");
   }
 
+  // Rollen mischen
   playerRoles = playerRoles.sort(() => Math.random() - 0.5);
   currentPlayer = 0;
+  isGameStarted = true;
 
-  document.getElementById("status").textContent = "Spiel gestartet! Rollen werden nacheinander angezeigt.";
-  showNextPlayerTransition();
+  // Status aktualisieren und Spielübergang starten
+  document.getElementById("status").textContent = "Spiel gestartet! Spieler sehen nacheinander ihre Rollen.";
+  document.getElementById("roleContainer").style.display = "none";
+  document.getElementById("transitionContainer").style.display = "block";
+  document.getElementById("nextPlayerButton").textContent = `Spieler ${currentPlayer + 1} bereit?`;
 }
 
-// Funktion für den Übergang zum nächsten Spieler
-function showNextPlayerTransition() {
-  if (currentPlayer < playerRoles.length) {
-    document.getElementById("nextPlayerContainer").style.display = "block";
-    document.getElementById("roleContainer").style.display = "none";
-    document.getElementById("nextPlayerButton").textContent = `Spieler ${currentPlayer + 1} bereit?`;
-  } else {
-    startGameTimer();
-  }
-}
-
-// Funktion zur Anzeige der Rolle des Spielers
-function showPlayerRole() {
+// Übergang zum nächsten Spieler anzeigen
+function nextPlayerTransition() {
+  if (!isGameStarted) return;
+  document.getElementById("transitionContainer").style.display = "none";
   document.getElementById("roleContainer").style.display = "block";
-  document.getElementById("nextPlayerContainer").style.display = "none";
+}
+
+// Rolle des aktuellen Spielers anzeigen
+function showPlayerRole() {
   const role = playerRoles[currentPlayer];
   document.getElementById("playerRole").textContent = role;
-  
-  document.getElementById("nextRoleButton").textContent = currentPlayer === playerRoles.length - 1 ? "Spiel starten!" : "Nächster Spieler";
-}
 
-// Funktion, um zum nächsten Spieler zu wechseln oder das Spiel zu starten
-function handleNextPlayer() {
-  currentPlayer++;
-  if (currentPlayer < playerRoles.length) {
-    showNextPlayerTransition();
+  // Spielerwechsel vorbereiten
+  if (currentPlayer < playerRoles.length - 1) {
+    currentPlayer++;
+    document.getElementById("revealRoleButton").style.display = "none";
+    document.getElementById("nextPlayerButton").textContent = `Nächster Spieler`;
+    document.getElementById("transitionContainer").style.display = "block";
+    document.getElementById("roleContainer").style.display = "none";
   } else {
+    document.getElementById("revealRoleButton").style.display = "none";
+    document.getElementById("nextPlayerButton").style.display = "none";
+    document.getElementById("status").textContent = "Alle Spieler haben ihre Rolle gesehen. Spiel kann starten!";
     startGameTimer();
   }
 }
 
-// Timer-Funktion
+// Timer starten
 function startGameTimer() {
   const timerLength = parseInt(document.getElementById("timerLength").value);
   timerSeconds = timerLength * 60;
