@@ -7,51 +7,47 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Spy Game</h1>
 
-        <div class="form-container">
-            <h2>Wähle Kategorien aus</h2>
-            <form id="categoryForm">
-                <label>
-                    <input type="checkbox" value="Tiere"> Tiere
-                </label><br>
-                <label>
-                    <input type="checkbox" value="Berufe"> Berufe
-                </label><br>
-                <label>
-                    <input type="checkbox" value="Sportarten"> Sportarten
-                </label><br>
-                <label>
-                    <input type="checkbox" value="Orte"> Orte
-                </label><br>
-            </form>
-
-            <div class="input-container">
-                <label for="playerCount">Anzahl der Spieler:</label>
-                <input type="number" id="playerCount" min="3" placeholder="Mindestens 3 Spieler" required>
-
-                <label for="spyCount">Anzahl der Spione:</label>
-                <input type="number" id="spyCount" min="1" required>
-
-                <label for="timerLength">Timer-Länge (in Minuten):</label>
-                <input type="number" id="timerLength" min="1" required>
-            </div>
-
-            <button id="startGameButton">Spiel starten</button>
+    <div id="setupForm">
+        <h2>Spiel Setup</h2>
+        <div>
+            <label for="categorySelect">Kategorien:</label><br>
+            <input type="checkbox" value="Tiere" id="categoryTiere"> Tiere<br>
+            <input type="checkbox" value="Berufe" id="categoryBerufe"> Berufe<br>
+            <input type="checkbox" value="Sportarten" id="categorySportarten"> Sportarten<br>
+            <input type="checkbox" value="Orte" id="categoryOrte"> Orte<br>
         </div>
 
-        <div id="gameContainer" style="display: none;">
-            <h2>Rolle aufdecken</h2>
-            <p id="roleDisplay"></p>
-            <button id="nextPlayerButton">Nächster Spieler</button>
-            <button id="startTimerButton" style="display:none;">Timer starten</button>
-            <div id="timerDisplay" style="display:none;">
-                <p id="timeRemaining">Zeit übrig: 00m 00s</p>
-                <button id="endGameButton">Spiel zu Ende</button>
-            </div>
+        <div>
+            <label for="playerCount">Anzahl der Spieler:</label>
+            <input type="number" id="playerCount" min="3" value="3">
+        </div>
+
+        <div>
+            <label for="spyCount">Anzahl der Spione:</label>
+            <input type="number" id="spyCount" min="1" value="1">
+        </div>
+
+        <div>
+            <label for="timerLength">Timer-Länge (Minuten):</label>
+            <input type="number" id="timerLength" min="1" value="5">
+        </div>
+
+        <button id="startGameButton">Spiel starten</button>
+    </div>
+
+    <div id="gameContainer" style="display: none;">
+        <h2>Rolle aufdecken</h2>
+        <p id="roleDisplay"></p>
+        <button id="nextPlayerButton">Nächster Spieler</button>
+        <button id="startTimerButton" style="display:none;">Timer starten</button>
+
+        <div id="timerDisplay" style="display:none;">
+            <p id="timeRemaining">Zeit übrig: 00m 00s</p>
+            <button id="endGameButton">Spiel zu Ende</button>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
