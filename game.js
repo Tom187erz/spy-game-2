@@ -117,4 +117,4 @@ function startGameTimer() {
         }
     }, 1000);
 
-    document.getElementById('timerDisplay').style.display =
+    document.getElementById('timerDisplay').
