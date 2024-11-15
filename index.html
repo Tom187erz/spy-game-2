@@ -1,59 +1,42 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spy Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-        .timer {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-        }
-        .game-over {
-            color: red;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spy Game</title>
 </head>
 <body>
-    <h1>Spy Game</h1>
+<h1>Spy Game</h1>
 
-    <label for="players">Anzahl der Spieler:</label>
-    <input type="number" id="players" min="3" required>
+<div>
+  <h2>Kategorien auswählen:</h2>
+  <label><input type="checkbox" name="category" value="Tiere"> Tiere</label>
+  <label><input type="checkbox" name="category" value="Berufe"> Berufe</label>
+  <label><input type="checkbox" name="category" value="Sportarten"> Sportarten</label>
+  <label><input type="checkbox" name="category" value="Orte"> Orte</label>
+</div>
 
-    <label for="spies">Anzahl der Spione:</label>
-    <input type="number" id="spies" min="1" required>
+<div>
+  <label>Anzahl der Spieler: <input type="number" id="playerCount" min="3"></label>
+  <label>Anzahl der Spione: <input type="number" id="spyCount" min="1"></label>
+  <label>Timer-Länge (Minuten): <input type="number" id="timerLength" min="1"></label>
+</div>
 
-    <label for="time">Timer-Länge (in Minuten):</label>
-    <input type="number" id="time" min="1" required>
+<button id="startGameButton">Spiel starten</button>
+<p id="status">Status: Spiel noch nicht gestartet.</p>
 
-    <label for="category">Kategorie auswählen:</label>
-    <select id="category" multiple>
-        <option value="Tiere">Tiere</option>
-        <option value="Berufe">Berufe</option>
-        <option value="Sportarten">Sportarten</option>
-        <option value="Orte">Orte</option>
-    </select>
+<div id="nextPlayerContainer" style="display:none;">
+  <button id="nextPlayerButton">Nächster Spieler</button>
+</div>
 
-    <button id="startButton">Spiel starten</button>
+<div id="roleContainer" style="display:none;">
+  <h3>Deine Rolle:</h3>
+  <p id="playerRole"></p>
+  <button id="nextRoleButton">Nächster Spieler</button>
+</div>
 
-    <div id="timer" class="timer">Zeit übrig: 00:00</div>
-    <div id="status"></div>
+<p id="timer">Zeit übrig: 0m 0s</p>
 
-    <script src="game.js"></script>
+<script src="game.js"></script>
 </body>
 </html>
