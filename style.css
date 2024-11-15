@@ -1,27 +1,31 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f2f2;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin: 0;
 }
 
 .container {
     width: 100%;
-    max-width: 600px;
-    background-color: white;
+    max-width: 700px;
     padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 h1 {
-    font-size: 2em;
+    font-size: 2.5em;
     margin-bottom: 20px;
+    color: #333;
+}
+
+h2 {
+    color: #333;
 }
 
 .form-container {
@@ -34,20 +38,23 @@ h1 {
 
 input {
     width: 80%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
 }
 
 button {
-    padding: 10px 20px;
+    padding: 12px 20px;
     background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    border-radius: 5px;
     font-size: 16px;
+    cursor: pointer;
+    width: 50%;
+    margin-top: 20px;
 }
 
 button:hover {
@@ -61,4 +68,16 @@ button:hover {
 #nextPlayerButton, #startTimerButton {
     display: inline-block;
     margin-top: 20px;
+    width: 45%;
+    background-color: #2196F3;
+}
+
+#nextPlayerButton:hover, #startTimerButton:hover {
+    background-color: #0b7dda;
+}
+
+#timerDisplay {
+    margin-top: 30px;
+    font-size: 1.5em;
+    font-weight: bold;
 }
