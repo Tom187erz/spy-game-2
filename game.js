@@ -1,140 +1,64 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const startGameButton = document.getElementById("startGameButton");
-    const categoryForm = document.getElementById("categoryForm");
-    const playerCountInput = document.getElementById("playerCount");
-    const spyCountInput = document.getElementById("spyCount");
-    const timerLengthInput = document.getElementById("timerLength");
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-    const roleDisplay = document.getElementById("roleDisplay");
-    const roleText = document.getElementById("roleText");
-    const nextPlayerButton = document.getElementById("nextPlayerButton");
+.container {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
 
-    const timerDisplay = document.getElementById("timerDisplay");
-    const timerElement = document.getElementById("timer");
-    const resetButton = document.getElementById("resetButton");
-    const endGameButton = document.getElementById("endGameButton");
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
 
-    const categories = {
-        "Tiere": ["Hund", "Katze", "Elefant", "Tiger", "Löwe", "Bär"],
-        "Berufe": ["Arzt", "Lehrer", "Ingenieur", "Koch", "Polizist"],
-        "Sportarten": ["Fußball", "Handball", "Schwimmen", "Tennis"],
-        "Orte": ["Deutschland", "Europa", "Krankenhaus", "Schule"]
-    };
+.form-container {
+    margin-bottom: 20px;
+}
 
-    let selectedCategories = [];
-    let playerRoles = [];
-    let currentPlayer = 0;
-    let gameTimer;
-    let timerSeconds;
+.input-container {
+    margin-top: 20px;
+}
 
-    // Wenn der Benutzer das Spiel startet
-    startGameButton.addEventListener("click", function() {
-        // Kategorien aus dem Formular holen
-        selectedCategories = Array.from(categoryForm.querySelectorAll('input[type="checkbox"]:checked'))
-                                   .map(checkbox => checkbox.value);
+input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
-        if (selectedCategories.length === 0) {
-            alert("Bitte wähle mindestens eine Kategorie.");
-            return;
-        }
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
 
-        // Spieleranzahl und Spionanzahl holen
-        const playerCount = parseInt(playerCountInput.value, 10);
-        const spyCount = parseInt(spyCountInput.value, 10);
-        const timerLength = parseInt(timerLengthInput.value, 10);
+button:hover {
+    background-color: #45a049;
+}
 
-        if (playerCount < 3 || spyCount >= playerCount) {
-            alert("Fehler: Ungültige Spieleranzahl.");
-            return;
-        }
+#gameContainer {
+    margin-top: 30px;
+}
 
-        // Spiel vorbereiten
-        prepareGame(selectedCategories, playerCount, spyCount, timerLength);
-    });
-
-    // Spiel vorbereiten
-    function prepareGame(categories, playerCount, spyCount, timerLength) {
-        // Alle Wörter aus den Kategorien holen
-        let allWords = [];
-        categories.forEach(category => {
-            allWords = allWords.concat(categories[category]);
-        });
-
-        // Geheimwort und Spione verteilen
-        const secretWord = allWords[Math.floor(Math.random() * allWords.length)];
-        playerRoles = [];
-
-        for (let i = 0; i < playerCount - spyCount; i++) {
-            playerRoles.push(`Geheimes Wort: ${secretWord}`);
-        }
-        for (let i = 0; i < spyCount; i++) {
-            playerRoles.push("Du bist der Spion!");
-        }
-
-        // Rollen zufällig mischen
-        playerRoles = shuffle(playerRoles);
-
-        // Timer vorbereiten
-        timerSeconds = timerLength * 60;
-        roleDisplay.style.display = "block";
-        showRole();
-    }
-
-    // Zeige die Rolle des aktuellen Spielers
-    function showRole() {
-        if (currentPlayer < playerRoles.length) {
-            roleText.textContent = playerRoles[currentPlayer];
-            nextPlayerButton.style.display = "block";
-        } else {
-            nextPlayerButton.style.display = "none";
-            startTimer();
-        }
-    }
-
-    // Spieler wechseln
-    nextPlayerButton.addEventListener("click", function() {
-        currentPlayer++;
-        showRole();
-    });
-
-    // Timer starten
-    function startTimer() {
-        timerDisplay.style.display = "block";
-        updateTimer();
-        gameTimer = setInterval(updateTimer, 1000);
-    }
-
-    // Timer aktualisieren
-    function updateTimer() {
-        const minutes = Math.floor(timerSeconds / 60);
-        const seconds = timerSeconds % 60;
-        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-        if (timerSeconds <= 0) {
-            clearInterval(gameTimer);
-            alert("Zeit abgelaufen!");
-        } else {
-            timerSeconds--;
-        }
-    }
-
-    // Timer zurücksetzen
-    resetButton.addEventListener("click", function() {
-        timerSeconds -= 60;
-        updateTimer();
-    });
-
-    // Spiel beenden
-    endGameButton.addEventListener("click", function() {
-        window.location.reload();
-    });
-
-    // Array zufällig mischen
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-});
+#nextPlayerButton, #startTimerButton {
+    display: inline-block;
+    margin-top: 20px;
+}
