@@ -89,4 +89,38 @@ document.getElementById('nextPlayerButton').addEventListener('click', function()
     showRole();
 });
 
-document.getElement
+document.getElementById('startTimerButton').addEventListener('click', function() {
+    startTimer();
+});
+
+document.getElementById('endGameButton').addEventListener('click', function() {
+    resetGame();
+});
+
+function startTimer() {
+    const timerLength = parseInt(document.getElementById('timerLength').value, 10);
+    timerSeconds = timerLength * 60;
+
+    timer = setInterval(function() {
+        if (timerSeconds <= 0) {
+            clearInterval(timer);
+            alert("Zeit abgelaufen!");
+            document.getElementById('timeRemaining').textContent = "Zeit abgelaufen!";
+        } else {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            document.getElementById('timeRemaining').textContent = `Zeit übrig: ${minutes}m ${seconds}s`;
+            timerSeconds--;
+        }
+    }, 1000);
+
+    document.getElementById('timerDisplay').style.display = 'block';
+}
+
+function resetGame() {
+    currentPlayer = 0;
+    document.getElementById('startGameButton').style.display = 'inline-block';
+    document.getElementById('gameContainer').style.display = 'none';
+    document.getElementById('timerDisplay').style.display = 'none';
+    document.getElementById('timeRemaining').textContent = "";
+}
