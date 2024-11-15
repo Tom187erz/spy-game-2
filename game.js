@@ -43,13 +43,10 @@ function prepareGame(selectedCategories, playerCount, spyCount, timerLength) {
         allWords = allWords.concat(categories[category]);
     });
 
-    // Zufällig ein geheimes Wort aus den ausgewählten Kategorien auswählen
-    const secretWord = allWords[Math.floor(Math.random() * allWords.length)];
-
     // Die Spielrollen (Spione und normale Spieler) festlegen
     playerRoles = [];
     for (let i = 0; i < playerCount - spyCount; i++) {
-        playerRoles.push(`Geheimes Wort: ${secretWord}`);
+        playerRoles.push("Du bist ein normaler Spieler!");
     }
     for (let i = 0; i < spyCount; i++) {
         playerRoles.push("Du bist der Spion!");
@@ -75,13 +72,9 @@ function shuffle(array) {
 
 function showRole() {
     const roleDisplay = document.getElementById('roleDisplay');
-    roleDisplay.textContent = "Spieler " + (currentPlayer + 1) + ": Deine Rolle wird jetzt aufgedeckt.";
+    roleDisplay.innerHTML = `Spieler ${currentPlayer + 1}: Deine Rolle wird jetzt aufgedeckt.<br><strong>${playerRoles[currentPlayer]}</strong>`;
 
-    // Anzeigen der Rolle des Spielers
-    const role = playerRoles[currentPlayer];
-    roleDisplay.innerHTML = `Deine Rolle: <strong>${role}</strong>`;
-
-    // Verstecken der "Nächster Spieler" und "Spiel starten!" Buttons für alle bis auf den letzten Spieler
+    // Wenn der letzte Spieler, der Button wird angezeigt
     if (currentPlayer === playerRoles.length - 1) {
         document.getElementById('startTimerButton').style.display = 'inline-block';
         document.getElementById('nextPlayerButton').style.display = 'none';
@@ -96,28 +89,4 @@ document.getElementById('nextPlayerButton').addEventListener('click', function()
     showRole();
 });
 
-document.getElementById('startTimerButton').addEventListener('click', function() {
-    startGameTimer();
-});
-
-function startGameTimer() {
-    const timerLength = parseInt(document.getElementById('timerLength').value, 10);
-    timerSeconds = timerLength * 60;
-
-    // Timer starten
-    timer = setInterval(function() {
-        if (timerSeconds <= 0) {
-            clearInterval(timer);
-            alert("Zeit abgelaufen!");
-            document.getElementById('timeRemaining').textContent = "Zeit abgelaufen!";
-            document.getElementById('timerDisplay').style.display = 'none';
-        } else {
-            const minutes = Math.floor(timerSeconds / 60);
-            const seconds = timerSeconds % 60;
-            document.getElementById('timeRemaining').textContent = `Zeit übrig: ${minutes}m ${seconds}s`;
-            timerSeconds--;
-        }
-    }, 1000);
-
-    document.getElementById('timerDisplay').style.display = 'block';
-}
+document.getElement
