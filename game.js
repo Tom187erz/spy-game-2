@@ -117,4 +117,5 @@ function startGameTimer() {
         }
     }, 1000);
 
-    document.getElementById('timerDisplay').
+    document.getElementById('timerDisplay').style.display = 'block';
+}
