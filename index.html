@@ -3,52 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spy Game - Among Us in Real Life</title>
+    <title>Spy Game</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <h1>Spy Game - Among Us in Real Life</h1>
-    
-    <!-- Setup Container -->
-    <div id="setupContainer">
-        <h2>Spiel Setup</h2>
-        <div>
+    <div class="container">
+        <h1>Spy Game</h1>
+
+        <!-- Kategorie-Auswahl -->
+        <div id="categorySelection">
+            <h2>Wähle eine Kategorie</h2>
+            <form id="categoryForm">
+                <label><input type="checkbox" name="category" value="Tiere"> Tiere</label><br>
+                <label><input type="checkbox" name="category" value="Berufe"> Berufe</label><br>
+                <label><input type="checkbox" name="category" value="Sportarten"> Sportarten</label><br>
+                <label><input type="checkbox" name="category" value="Orte"> Orte</label><br>
+            </form>
+        </div>
+
+        <!-- Eingabefelder für Spieleranzahl -->
+        <div id="gameSetup">
+            <h2>Spieleinstellungen</h2>
             <label for="playerCount">Anzahl der Spieler:</label>
-            <input type="number" id="playerCount" min="3" required>
-        </div>
-        <div>
+            <input type="number" id="playerCount" min="3" max="10" value="3"><br>
             <label for="spyCount">Anzahl der Spione:</label>
-            <input type="number" id="spyCount" min="1" required>
-        </div>
-        <div>
+            <input type="number" id="spyCount" min="1" max="9" value="1"><br>
             <label for="timerLength">Timer-Länge (in Minuten):</label>
-            <input type="number" id="timerLength" min="1" required>
+            <input type="number" id="timerLength" min="1" max="10" value="5"><br>
+            <button id="startGameButton">Spiel starten</button>
         </div>
-        <button id="startGameButton">Spiel starten</button>
+
+        <!-- Anzeigen der Spielerrollen -->
+        <div id="roleDisplay" style="display:none;">
+            <h2>Deine Rolle</h2>
+            <p id="roleText"></p>
+            <button id="nextPlayerButton">Nächster Spieler</button>
+        </div>
+
+        <!-- Timer Anzeige -->
+        <div id="timerDisplay" style="display:none;">
+            <h2>Restzeit</h2>
+            <p id="timer"></p>
+            <button id="resetButton">Timer zurücksetzen</button>
+            <button id="endGameButton">Spiel beenden</button>
+        </div>
     </div>
 
-    <!-- Transition Container (für Spielerwechsel) -->
-    <div id="transitionContainer" style="display:none;">
-        <h2>Spieler {playerIndex} ist dran!</h2>
-        <button id="nextPlayerButton">Nächster Spieler</button>
-    </div>
-
-    <!-- Container für Timer -->
-    <div id="timerContainer" style="display:none;">
-        <h2>Timer</h2>
-        <div id="timer">00:00</div>
-        <button id="resetButton">Timer zurücksetzen</button>
-        <button id="endGameButton">Spiel beenden</button>
-    </div>
-
-    <!-- Container für die Rolle des Spielers -->
-    <div id="roleContainer" style="display:none;">
-        <h2>Deine Rolle</h2>
-        <p id="role"></p>
-        <button id="nextButton">Nächster Spieler</button>
-    </div>
-
-    <!-- Link zum JavaScript -->
     <script src="game.js"></script>
 </body>
 </html>
