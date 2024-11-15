@@ -1,130 +1,140 @@
-const categoryMap = {
-  Tiere: ["Hund", "Katze", "Elefant", "Tiger", "Löwe", "Bär"],
-  Berufe: ["Arzt", "Lehrer", "Ingenieur", "Koch", "Polizist"],
-  Sportarten: ["Fußball", "Handball", "Schwimmen", "Tennis"],
-  Orte: ["Deutschland", "Europa", "Krankenhaus", "Schule"]
-};
+document.addEventListener("DOMContentLoaded", function() {
+    const startGameButton = document.getElementById("startGameButton");
+    const categoryForm = document.getElementById("categoryForm");
+    const playerCountInput = document.getElementById("playerCount");
+    const spyCountInput = document.getElementById("spyCount");
+    const timerLengthInput = document.getElementById("timerLength");
 
-let playerRoles = [];
-let currentPlayer = 0;
-let timer;
-let timerSeconds = 0;
-let isGameStarted = false;
+    const roleDisplay = document.getElementById("roleDisplay");
+    const roleText = document.getElementById("roleText");
+    const nextPlayerButton = document.getElementById("nextPlayerButton");
 
-// DOM-Elemente abrufen
-const startGameButton = document.getElementById("startGameButton");
-const revealRoleButton = document.getElementById("revealRoleButton");
-const playerRoleElement = document.getElementById("playerRole");
-const transitionContainer = document.getElementById("transitionContainer");
-const roleContainer = document.getElementById("roleContainer");
-const statusElement = document.getElementById("status");
-const nextPlayerButton = document.getElementById("nextPlayerButton");
-const timerElement = document.getElementById("timer");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const timerElement = document.getElementById("timer");
+    const resetButton = document.getElementById("resetButton");
+    const endGameButton = document.getElementById("endGameButton");
 
-// Event-Listener hinzufügen
-startGameButton.addEventListener("click", startGame);
-nextPlayerButton.addEventListener("click", showPlayerRole);
-revealRoleButton.addEventListener("click", proceedToNextPlayer);
+    const categories = {
+        "Tiere": ["Hund", "Katze", "Elefant", "Tiger", "Löwe", "Bär"],
+        "Berufe": ["Arzt", "Lehrer", "Ingenieur", "Koch", "Polizist"],
+        "Sportarten": ["Fußball", "Handball", "Schwimmen", "Tennis"],
+        "Orte": ["Deutschland", "Europa", "Krankenhaus", "Schule"]
+    };
 
-// Spiel starten und Rollen verteilen
-function startGame() {
-  const playerCount = parseInt(document.getElementById("playerCount").value);
-  const spyCount = parseInt(document.getElementById("spyCount").value);
-  const timerLength = parseInt(document.getElementById("timerLength").value);
+    let selectedCategories = [];
+    let playerRoles = [];
+    let currentPlayer = 0;
+    let gameTimer;
+    let timerSeconds;
 
-  const selectedCategories = Array.from(document.querySelectorAll("input[name='category']:checked"))
-    .map(checkbox => checkbox.value);
+    // Wenn der Benutzer das Spiel startet
+    startGameButton.addEventListener("click", function() {
+        // Kategorien aus dem Formular holen
+        selectedCategories = Array.from(categoryForm.querySelectorAll('input[type="checkbox"]:checked'))
+                                   .map(checkbox => checkbox.value);
 
-  if (selectedCategories.length === 0) {
-    alert("Bitte mindestens eine Kategorie auswählen.");
-    return;
-  }
+        if (selectedCategories.length === 0) {
+            alert("Bitte wähle mindestens eine Kategorie.");
+            return;
+        }
 
-  if (isNaN(playerCount) || isNaN(spyCount) || isNaN(timerLength) || playerCount < 3 || spyCount >= playerCount || timerLength < 1) {
-    alert("Fehler: Ungültige Eingaben.");
-    return;
-  }
+        // Spieleranzahl und Spionanzahl holen
+        const playerCount = parseInt(playerCountInput.value, 10);
+        const spyCount = parseInt(spyCountInput.value, 10);
+        const timerLength = parseInt(timerLengthInput.value, 10);
 
-  // Alle Wörter der ausgewählten Kategorien sammeln
-  let allWords = [];
-  selectedCategories.forEach(category => {
-    allWords = allWords.concat(categoryMap[category]);
-  });
+        if (playerCount < 3 || spyCount >= playerCount) {
+            alert("Fehler: Ungültige Spieleranzahl.");
+            return;
+        }
 
-  // Geheimwort auswählen
-  const secretWord = allWords[Math.floor(Math.random() * allWords.length)];
-  playerRoles = [];
+        // Spiel vorbereiten
+        prepareGame(selectedCategories, playerCount, spyCount, timerLength);
+    });
 
-  // Rollen zuweisen: Spione und normale Spieler
-  for (let i = 0; i < playerCount - spyCount; i++) {
-    playerRoles.push(`Geheimes Wort: ${secretWord}`);
-  }
-  for (let i = 0; i < spyCount; i++) {
-    playerRoles.push("Du bist der Spion!");
-  }
+    // Spiel vorbereiten
+    function prepareGame(categories, playerCount, spyCount, timerLength) {
+        // Alle Wörter aus den Kategorien holen
+        let allWords = [];
+        categories.forEach(category => {
+            allWords = allWords.concat(categories[category]);
+        });
 
-  // Rollen mischen
-  playerRoles = playerRoles.sort(() => Math.random() - 0.5);
-  currentPlayer = 0;
-  isGameStarted = true;
+        // Geheimwort und Spione verteilen
+        const secretWord = allWords[Math.floor(Math.random() * allWords.length)];
+        playerRoles = [];
 
-  // UI aktualisieren
-  statusElement.textContent = "Spiel gestartet! Spieler sehen nacheinander ihre Rollen.";
-  transitionContainer.style.display = "block";
-  roleContainer.style.display = "none";
-  nextPlayerButton.textContent = `Spieler ${currentPlayer + 1} bereit?`;
-}
+        for (let i = 0; i < playerCount - spyCount; i++) {
+            playerRoles.push(`Geheimes Wort: ${secretWord}`);
+        }
+        for (let i = 0; i < spyCount; i++) {
+            playerRoles.push("Du bist der Spion!");
+        }
 
-// Übergang zum aktuellen Spieler und Rolle anzeigen
-function showPlayerRole() {
-  if (!isGameStarted || currentPlayer >= playerRoles.length) return;
+        // Rollen zufällig mischen
+        playerRoles = shuffle(playerRoles);
 
-  // Rolle des aktuellen Spielers anzeigen
-  const role = playerRoles[currentPlayer];
-  playerRoleElement.textContent = role;
-
-  // UI aktualisieren
-  transitionContainer.style.display = "none";
-  roleContainer.style.display = "block";
-
-  // Button-Text aktualisieren
-  revealRoleButton.textContent = currentPlayer < playerRoles.length - 1 ? "Nächster Spieler" : "Spiel starten!";
-}
-
-// Zum nächsten Spieler übergehen oder Spiel starten
-function proceedToNextPlayer() {
-  if (currentPlayer < playerRoles.length - 1) {
-    // Nächster Spieler vorbereiten
-    currentPlayer++;
-    transitionContainer.style.display = "block";
-    roleContainer.style.display = "none";
-    nextPlayerButton.textContent = `Spieler ${currentPlayer + 1} bereit?`;
-  } else {
-    // Alle Spieler haben ihre Rollen gesehen, Spiel beginnt
-    statusElement.textContent = "Alle Spieler haben ihre Rolle gesehen. Spiel beginnt jetzt!";
-    transitionContainer.style.display = "none";
-    roleContainer.style.display = "none";
-    startGameTimer();
-  }
-}
-
-// Timer starten
-function startGameTimer() {
-  const timerLength = parseInt(document.getElementById("timerLength").value);
-  timerSeconds = timerLength * 60;
-
-  const updateTimer = () => {
-    if (timerSeconds <= 0) {
-      clearInterval(timer);
-      alert("Zeit abgelaufen!");
-      statusElement.textContent = "Zeit abgelaufen!";
-    } else {
-      timerSeconds--;
-      const minutes = Math.floor(timerSeconds / 60);
-      const seconds = timerSeconds % 60;
-      timerElement.textContent = `Zeit übrig: ${minutes}m ${seconds < 10 ? "0" + seconds : seconds}s`;
+        // Timer vorbereiten
+        timerSeconds = timerLength * 60;
+        roleDisplay.style.display = "block";
+        showRole();
     }
-  };
 
-  timer = setInterval(updateTimer, 1000);
-}
+    // Zeige die Rolle des aktuellen Spielers
+    function showRole() {
+        if (currentPlayer < playerRoles.length) {
+            roleText.textContent = playerRoles[currentPlayer];
+            nextPlayerButton.style.display = "block";
+        } else {
+            nextPlayerButton.style.display = "none";
+            startTimer();
+        }
+    }
+
+    // Spieler wechseln
+    nextPlayerButton.addEventListener("click", function() {
+        currentPlayer++;
+        showRole();
+    });
+
+    // Timer starten
+    function startTimer() {
+        timerDisplay.style.display = "block";
+        updateTimer();
+        gameTimer = setInterval(updateTimer, 1000);
+    }
+
+    // Timer aktualisieren
+    function updateTimer() {
+        const minutes = Math.floor(timerSeconds / 60);
+        const seconds = timerSeconds % 60;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        if (timerSeconds <= 0) {
+            clearInterval(gameTimer);
+            alert("Zeit abgelaufen!");
+        } else {
+            timerSeconds--;
+        }
+    }
+
+    // Timer zurücksetzen
+    resetButton.addEventListener("click", function() {
+        timerSeconds -= 60;
+        updateTimer();
+    });
+
+    // Spiel beenden
+    endGameButton.addEventListener("click", function() {
+        window.location.reload();
+    });
+
+    // Array zufällig mischen
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+});
