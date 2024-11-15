@@ -1,3 +1,4 @@
+// Kategorien mit ihren jeweiligen Wörtern
 const categories = {
     Tiere: ["Hund", "Katze", "Elefant", "Tiger", "Löwe", "Bär"],
     Berufe: ["Arzt", "Lehrer", "Ingenieur", "Koch", "Polizist"],
@@ -103,16 +104,17 @@ function startGameTimer() {
     const timerLength = parseInt(document.getElementById('timerLength').value, 10);
     timerSeconds = timerLength * 60;
 
+    // Timer starten
     timer = setInterval(function() {
-        const minutes = Math.floor(timerSeconds / 60);
-        const seconds = timerSeconds % 60;
-
-        document.getElementById('timeRemaining').textContent = `Zeit übrig: ${minutes}m ${seconds}s`;
-
         if (timerSeconds <= 0) {
             clearInterval(timer);
             alert("Zeit abgelaufen!");
+            document.getElementById('timeRemaining').textContent = "Zeit abgelaufen!";
+            document.getElementById('timerDisplay').style.display = 'none';
         } else {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            document.getElementById('timeRemaining').textContent = `Zeit übrig: ${minutes}m ${seconds}s`;
             timerSeconds--;
         }
     }, 1000);
